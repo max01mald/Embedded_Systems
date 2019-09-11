@@ -1,0 +1,48 @@
+html, body {
+    height: 100%;
+}
+
+.container {
+    height: 100%;
+    min-height: 100%;
+}
+
+table#plant-table {
+    width: 100%;
+}
+
+table#plant-table input {
+    border: none;
+    border-color: transparent;
+}
+
+table#weekly-schedule-table, table#stats {
+    border: solid 1px;
+    height: 100%;
+    width: 100%;
+}
+
+table#weekly-schedule-table td, table#stats td {
+    border: solid 1px;
+}
+
+table#stats td { /* td:not(.sensor) ? */
+    text-align: center;
+}
+
+.modal-full {
+    min-width: 100%;
+    margin: 0;
+}
+
+.dropdown#schedule-select {
+    margin-left: 5px;
+}
+
+form.test {
+    display: inline;
+}
+
+p#watering-command-status {
+    display: inline;
+}

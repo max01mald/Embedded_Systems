@@ -1,0 +1,5 @@
+venv
+poop*
+database.db
+*.pyc
+Statistics

@@ -1,0 +1,265 @@
+<!-- REMINDER: bootstrap scripts are links that rely on internet connection -->
+<!-- perhaps it would be best to store all that shit in a lib folder so that the UI doesn't get rekt if there's no internet connection -->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SmrtPot</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
+        crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../static/css/app.css" rel="stylesheet"/>
+
+    <!-- jQuery weekly schedule dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.11.2.js"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous" async></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+        crossorigin="anonymous" async></script>
+    <script src="../static/js/app.js"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="margin-bottom: 120px">
+        <a class="navbar-brand" href="#">
+            <img src="" alt="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Settings</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" href="/Stats">Stats page</a>
+                </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <div style="margin-bottom:10px"></div>
+
+    <div class="container fill">
+        <div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="container-header">Plants</h5>
+                    <table id="plant-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Start</th>
+                                <th>Schedule Type</th>
+                                <th>Rating</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in plantRows %}
+                        <tr>
+                            <form action="{{ url_for('removePlant') }}" method="post" onsubmit="return confirm('Delete plant {{ row['plantName'] }}?')">
+                                <td><input type="text" size="15" name="plantName" value="{{ row['plantName'] }}" readonly/></td>
+                                <td>{{ row["startTime"] }}</td>
+                                <td>{{ row["scheduleName"] }}</td>
+                                <td>rating</td>
+                                <td><input type='submit' name='plant_remove' value='Remove' class='btn btn-primary'></td>
+                            </form>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-plant-modal">Add plant</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#schedule-modal">Edit schedules</button>
+                    <form action="{{ url_for('startWatering') }}" method="post" class="test">
+                        <input type="submit" value="Start watering" class="btn btn-primary"/>
+                    </form>
+                    <form action="{{ url_for('stopWatering') }}" method="post" class="test">
+                        <input type="submit" value="Stop watering" class="btn btn-primary"/>
+                    </form>
+                    <p id="watering-command-status">Watering status: {{ waterCommandStatus }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add plant modal -->
+    <div class="modal" id="add-plant-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Plant</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ url_for('addPlant') }}" method="post">
+                    <div class="modal-body">
+                        <table>
+                            <tr>
+                                <td>Plant Name: </td>
+                                <td><input name="plantName" id="plantNameInput" type="text" required autofocus></td>
+                            </tr>
+                            <tr>
+                                <td>Plant Type: </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <input name="plantType" class="btn btn-secondary dropdown-toggle" value="Non-Cactus" type="text" id="plant-type-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" readonly/>
+                                        <div class="dropdown-menu" id="plant-type-select" aria-labelledby="plantTypeDropdown">
+                                            <a class="dropdown-item" href="#">Non-Cactus</a>
+                                            <a class="dropdown-item" href="#">Cactus</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" name="add_plant" class="btn btn-primary">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scheduler modal -->
+    <div class="modal" id="schedule-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-full" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Schedule</h5>
+                    <div class="dropdown" id="schedule-select">
+                        <input name="selectedScheduleLabel" class="btn btn-secondary dropdown-toggle" type="text" value="{{ selectedSchedule }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" readonly/>
+                        <form id="select-schedule" action="/selectSchedule" method="post">
+                            <input name="selectedSchedule" value="Non-Cactus default" type="hidden"/>
+                        </form>
+                        <div class="dropdown-menu" id="schedule-select" aria-labelledby="plantTypeDropdown">
+                            {% for schedule in scheduleRows %}
+                                <a class="dropdown-item" href="#">{{ schedule['scheduleName'] }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="weekly-schedule">
+                        <table id="weekly-schedule-table">
+                            <thead>
+                                <tr>
+                                    <td>Monday</td>
+                                    <td>Tuesday</td>
+                                    <td>Wednesday</td>
+                                    <td>Thursday</td>
+                                    <td>Friday</td>
+                                    <td>Saturday</td>
+                                    <td>Sunday</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="monday">
+                                        {% for row in blockRows %}
+                                            {% if row['dayOfWeek'] == 0 %}
+                                                <li>{{ row['startTime'] }} - {{ row['durationSeconds'] }}s</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td id="tuesday">
+                                        {% for row in blockRows %}
+                                            {% if row['dayOfWeek'] == 1 %}
+                                                <li>{{ row['startTime'] }} - {{ row['durationSeconds'] }}s</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td id="wednesday">
+                                        {% for row in blockRows %}
+                                            {% if row['dayOfWeek'] == 2 %}
+                                                <li>{{ row['startTime'] }} - {{ row['durationSeconds'] }}s</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td id="thursday">
+                                        {% for row in blockRows %}
+                                            {% if row['dayOfWeek'] == 3 %}
+                                                <li>{{ row['startTime'] }} - {{ row['durationSeconds'] }}s</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td id="friday">
+                                        {% for row in blockRows %}
+                                            {% if row['dayOfWeek'] == 4 %}
+                                                <li>{{ row['startTime'] }} - {{ row['durationSeconds'] }}s</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td id="saturday">
+                                        {% for row in blockRows %}
+                                            {% if row['dayOfWeek'] == 5 %}
+                                                <li>{{ row['startTime'] }} - {{ row['durationSeconds'] }}s</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td id="sunday">
+                                        {% for row in blockRows %}
+                                            {% if row['dayOfWeek'] == 6 %}
+                                                <li>{{ row['startTime'] }} - {{ row['durationSeconds'] }}s</li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- step="1" adds seconds to the startTime input -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="day-select" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Select Day
+                        </button>
+                        <div class="dropdown-menu" id="day-select" aria-labelledby="dropdownDaySelect">
+                            <a class="dropdown-item" href="#">Monday</a>
+                            <a class="dropdown-item" href="#">Tuesday</a>
+                            <a class="dropdown-item" href="#">Wednesday</a>
+                            <a class="dropdown-item" href="#">Thursday</a>
+                            <a class="dropdown-item" href="#">Friday</a>
+                            <a class="dropdown-item" href="#">Saturday</a>
+                            <a class="dropdown-item" href="#">Sunday</a>
+                            <a class="dropdown-item" href="#">Every day</a>
+                        </div>
+                    </div>
+                    <input type="time" name="startTime" value="00:00:00" step="1"/>
+                    <!-- min 1 second, max 6 minutes runtime -->
+                    <input type="number" name="duration" min="1" max="600" value="1"/>
+                    <input type="button" name="add_watering_block" value="Add Block" class="btn btn-primary">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

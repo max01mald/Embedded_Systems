@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>SmrtPot</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../static/css/app.css" rel="stylesheet"/>
+
+    <!-- jQuery weekly schedule dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.11.2.js"></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" async></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" async></script>
+    <script src="../static/js/app.js"></script>
+
+    <script>
+        $("#update-stats").submit();
+
+        window.setInterval(function() {
+            console.log("updating");
+            $("#update-stats").submit();
+        }, 5000);        
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" style="margin-bottom: 120px">
+        <a class="navbar-brand" href="#">
+            <img src="" alt="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <form id="update-stats" action="/Stats" method="post">
+            <input type="hidden"/>
+        </form>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">Settings</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                    <a class="dropdown-item" href="/">Garden page</a>
+                </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <div style="margin-bottom:10px"></div>
+
+    <div id="stats-container" class="container-fill">
+        <h5 class="container-header">Latest Stats</h5>
+        <table id="stats">
+            <thead>
+                <tr>
+                    <td>Sensor</td>
+                    <td>Seconds</td>
+                    <td>Minutes</td>
+                    <td>Hours</td>
+                    <td>Days</td>
+                    <td>Weeks</td>
+                    <td>Months</td>
+                    <td>Years</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sensor">Light</td>
+                    <td>{{ lightSeconds }}</td>
+                    <td>{{ lightMinutes }}</td>
+                    <td>{{ lightHours }}</td>
+                    <td>{{ lightDays }}</td>
+                    <td>{{ lightWeeks }}</td>
+                    <td>{{ lightMonths }}</td>
+                    <td>{{ lightYears }}</td>
+                </tr>
+                <tr>
+                    <td class="sensor">Moisture CH0</td>
+                    <td>{{ moist0Seconds }}</td>
+                    <td>{{ moist0Minutes }}</td>
+                    <td>{{ moist0Hours }}</td>
+                    <td>{{ moist0Days }}</td>
+                    <td>{{ moist0Weeks }}</td>
+                    <td>{{ moist0Months }}</td>
+                    <td>{{ moist0Years }}</td>
+                </tr>
+                <tr>
+                    <td class="sensor">Moisture CH1</td>
+                    <td>{{ moist1Seconds }}</td>
+                    <td>{{ moist1Minutes }}</td>
+                    <td>{{ moist1Hours }}</td>
+                    <td>{{ moist1Days }}</td>
+                    <td>{{ moist1Weeks }}</td>
+                    <td>{{ moist1Months }}</td>
+                    <td>{{ moist1Years }}</td>
+                </tr>
+                <tr>
+                    <td class="sensor">Moisture CH2</td>
+                    <td>{{ moist2Seconds }}</td>
+                    <td>{{ moist2Minutes }}</td>
+                    <td>{{ moist2Hours }}</td>
+                    <td>{{ moist2Days }}</td>
+                    <td>{{ moist2Weeks }}</td>
+                    <td>{{ moist2Months }}</td>
+                    <td>{{ moist2Years }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
